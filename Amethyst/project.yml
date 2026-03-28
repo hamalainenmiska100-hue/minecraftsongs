@@ -1,0 +1,33 @@
+name: Amethyst
+options:
+  bundleIdPrefix: com.amethyst
+settings:
+  base:
+    SWIFT_VERSION: 5.9
+    IPHONEOS_DEPLOYMENT_TARGET: 16.0
+targets:
+  Amethyst:
+    type: application
+    platform: iOS
+    sources:
+      - Sources/Amethyst
+    info:
+      path: Sources/Amethyst/Info.plist
+      properties:
+        CFBundleDisplayName: Amethyst
+        UILaunchScreen: {}
+        LSApplicationQueriesSchemes:
+          - amethyst
+        CFBundleURLTypes:
+          - CFBundleURLName: com.amethyst.player
+            CFBundleURLSchemes:
+              - amethyst
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.amethyst.player
+        PRODUCT_NAME: Amethyst
+        INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
+        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
