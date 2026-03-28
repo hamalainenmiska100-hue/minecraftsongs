@@ -1,0 +1,44 @@
+name: Build Unsigned iOS IPA
+
+on:
+  workflow_dispatch:
+
+jobs:
+  unsigned-ipa:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Generate Xcode project
+        working-directory: Amethyst
+        run: xcodegen generate
+
+      - name: Build iOS app without signing
+        working-directory: Amethyst
+        run: |
+          xcodebuild -project Amethyst.xcodeproj \
+            -scheme Amethyst \
+            -configuration Release \
+            -sdk iphoneos \
+            -archivePath build/Amethyst.xcarchive \
+            CODE_SIGNING_ALLOWED=NO \
+            archive
+
+      - name: Package unsigned IPA
+        working-directory: Amethyst
+        run: |
+          mkdir -p build/Payload
+          cp -R build/Amethyst.xcarchive/Products/Applications/Amethyst.app build/Payload/
+          cd build
+          /usr/bin/zip -r Amethyst-unsigned.ipa Payload
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Amethyst-unsigned-ipa
+          path: Amethyst/build/Amethyst-unsigned.ipa
